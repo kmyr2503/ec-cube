@@ -40,6 +40,18 @@ RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
 
 RUN pecl install apcu && echo "extension=apcu.so" > /usr/local/etc/php/conf.d/apc.ini
 
+# Xdebug のインストールと基本設定
+RUN pecl install xdebug \
+  && docker-php-ext-enable xdebug \
+  && { \
+       echo "xdebug.mode=debug"; \
+       echo "xdebug.start_with_request=yes"; \
+       echo "xdebug.client_host=host.docker.internal"; \
+       echo "xdebug.client_port=9003"; \
+       echo "xdebug.log=/tmp/xdebug.log"; \
+       echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20210902/xdebug.so"; \
+     } > ${PHP_INI_DIR}/conf.d/docker-php-ext-xdebug.ini
+
 RUN mkdir -p ${APACHE_DOCUMENT_ROOT} \
   && sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
   && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf \
