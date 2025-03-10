@@ -43,6 +43,7 @@ node_modules
 *.neon
 *.css
 *.css.map
+.DS_Store
 
 ###> symfony/phpunit-bridge ###
 .phpunit
