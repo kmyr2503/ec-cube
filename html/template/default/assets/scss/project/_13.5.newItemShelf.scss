@@ -1,0 +1,74 @@
+@import "../mixins/media";
+@import "../mixins/projects";
+/*
+新着商品
+
+商品一覧 新着商品 に関する Project コンポーネントを定義します。
+*/
+.ec-newItemShelfRole{
+  @include container;
+}
+
+/*
+商品一覧新着商品
+
+商品一覧 で使用する新着商品のコンポーネントです。
+*/
+.ec-newItemShelf{
+  @include reset_link;
+  display: flex;
+  margin-left: 0;
+  margin-right: 0;
+  flex-wrap: wrap;
+  padding: 0;
+  list-style: none;
+
+  @include media_desktop {
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+  & &__item{
+    margin-bottom: 36px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    &-image {
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    img{
+      width: auto;
+      max-height: 100%;
+    }
+    @include media_desktop(){
+      padding: 0 16px;
+      width: 20%;
+    }
+
+    .ec-productRole__btn {
+      margin-top: auto;
+      margin-bottom: 15px;
+    }
+  }
+  & &__item:nth-child(odd){
+    padding-right: 8px;
+    @include media_desktop(){
+      padding: 0 16px;
+    }
+  }
+  & &__item:nth-child(even){
+    padding-left: 8px;
+    @include media_desktop(){
+      padding: 0 16px;
+    }
+  }
+  & &__title {
+    margin-bottom: 7px;
+  }
+  & &__plice {
+    font-weight: bold;
+  }
+  & &__message {
+    color: red;
+  }
+}
