@@ -17,6 +17,7 @@ node_modules
 !/app/template/smartphone
 /app/proxy/entity/*
 !/app/proxy/entity/.gitkeep
+/html/bundle/*
 /html/plugin/*
 !/html/plugin/.gitkeep
 /html/upload/save_image/*
