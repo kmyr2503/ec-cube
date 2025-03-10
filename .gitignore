@@ -41,6 +41,8 @@ node_modules
 .env
 .maintenance
 *.neon
+*.css
+*.css.map
 
 ###> symfony/phpunit-bridge ###
 .phpunit
