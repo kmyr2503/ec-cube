@@ -14,9 +14,8 @@ include /assets/tmpl/elements/11.8.footer.pug
 Styleguide 11.3
 */
 .ec-footerRole{
-  border-top: 1px solid #7d7d7d;
   margin-top: 30px;
-  background: black;
+  background: #DE5D50;
 
   @include media_desktop(){
     padding-top: 40px;

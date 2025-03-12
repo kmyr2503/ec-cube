@@ -276,11 +276,32 @@ Styleguide 11.2.3
     margin-right: 10px;
     margin-left: 10px;
     font-size: 18px;
-    color: black;
+    color: white;
     @include media_desktop {
       margin-right: 0;
       font-size: 20px;
     }
+  }
+  @mixin icon-shadow($color) {
+    $size: 1px;
+    text-shadow: 
+      $color $size $size 0,
+      $color (-$size) (-$size) 0, 
+      $color (-$size) $size 0,
+      $color $size (-$size) 0,
+      $color 0 $size 0,
+      $color 0 (-$size) 0,
+      $color (-$size) 0 0,
+      $color $size 0 0;
+  }
+  & .fa-user {
+    @include icon-shadow(navy);
+  }
+  & .fa-heart {
+    @include icon-shadow(pink); 
+  }
+  & .fa-lock {
+    @include icon-shadow(gold);
   }
   & &__itemLink {
     display: none;
