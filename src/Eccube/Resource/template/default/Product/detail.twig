@@ -158,11 +158,14 @@ file that was distributed with this source code.
             $(window).resize(removeSize);
             $('.item_visual').slick({
                 dots: false,
-                arrows: false,
+                arrows: true,
+                prevArrow: '<div class="slider-prev"><i class="fas fa-chevron-left"></i></div>',
+                nextArrow: '<div class="slider-next"><i class="fas fa-chevron-right"></i></div>',
                 responsive: [{
                     breakpoint: 768,
                     settings: {
-                        dots: true
+                        dots: true,
+                        arrows: false
                     }
                 }]
             });
