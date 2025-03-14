@@ -652,6 +652,9 @@ admin.product.stock: 在庫数
 admin.product.stock__short: 在庫
 admin.product.stock__in_stock: あり
 admin.product.stock__out_of_stock: なし
+admin.product.stock_status: 在庫状況
+admin.product.stock_status__in_stock: 在庫あり
+admin.product.stock_status__out_of_stock: 在庫なし
 admin.product.search_word: 検索ワード
 admin.product.product_code: 商品コード
 admin.product.product_code__short: コード

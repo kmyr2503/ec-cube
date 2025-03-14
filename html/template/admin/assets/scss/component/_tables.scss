@@ -1,0 +1,10 @@
+@import "../library/_variable";
+@import "../mixin/_media";
+
+/*
+テーブル
+*/
+.empty-row td {
+  background-color: transparent;
+  box-shadow: none;
+}
