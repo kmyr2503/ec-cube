@@ -1,0 +1,98 @@
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'front_page' %}
+
+{% block main %}
+    <div class="ec-role">
+        <div class="ec-pageHeader">
+            <h1>クロスサイトスクリプティングデモ</h1>
+        </div>
+        
+        <div class="ec-off1Grid">
+            <div class="ec-off1Grid__cell">
+                <p class="text-danger">※ これは教育目的のデモページです。実際の開発では安全な方法を常に使用してください。</p>
+                
+                <form method="post" action="{{ url('xss_demo') }}" class="ec-searchForm">
+                    <div class="ec-input">
+                        <textarea name="message" class="ec-input__input" placeholder="メッセージを入力してください">{{ message }}</textarea>
+                    </div>
+                    
+                    <div class="ec-radio ec-searchOptions">
+                        <div class="ec-radio__wrap">
+                            <label>
+                                <input type="radio" name="display_type" value="safe" {% if display_type == 'safe' or display_type is empty %}checked{% endif %}>
+                                安全な表示方法（HTMLエスケープあり）
+                            </label>
+                        </div>
+                        <div class="ec-radio__wrap">
+                            <label>
+                                <input type="radio" name="display_type" value="unsafe" {% if display_type == 'unsafe' %}checked{% endif %}>
+                                安全でない表示方法（XSSの脆弱性あり）
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="ec-blockBtn--action">
+                        <button type="submit" class="ec-blockBtn--action">表示する</button>
+                    </div>
+                </form>
+                
+                <hr>
+                
+                <div class="ec-searchResultHeader">
+                    <h2>表示結果</h2>
+                </div>
+                
+                <div class="ec-alert-warning">
+                    <div class="ec-alert-warning__text">
+                        <h4>現在の表示方法: {{ display_type == 'safe' ? '安全' : '安全でない' }}</h4>
+                    </div>
+                </div>
+                
+                <div class="ec-shelfGrid">
+                    <div class="ec-shelfGrid__item">
+                        <div class="ec-productRole">
+                            <div class="ec-productRole__description">
+                                <div class="message-output">
+                                    {% if rendered_message is not empty %}
+                                        {% if display_type == 'safe' %}
+                                            {{ rendered_message|e }}
+                                        {% else %}
+                                            {# デフォルトでエスケープされるのでrawで危険なコードを表示 #}
+                                            {{ rendered_message|raw }}
+                                        {% endif %}
+                                    {% else %}
+                                        <p class="text-muted">メッセージが入力されていません</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="ec-alert-warning">
+                    <div class="ec-alert-warning__text">
+                        <h4>クロスサイトスクリプティング（XSS）とは</h4>
+                        <p>
+                            クロスサイトスクリプティング（XSS）は、Webアプリケーションのセキュリティ上の脆弱性の一つで、
+                            攻撃者が悪意のあるスクリプトをWebページに埋め込み、他のユーザーのブラウザで実行させる攻撃手法です。
+                        </p>
+                        <p>
+                            安全でない方法で表示する場合、以下のような入力で攻撃ができる可能性があります：
+                        </p>
+                        <ul>
+                            <li><code>&lt;script&gt;alert('XSS攻撃!');&lt;/script&gt;</code> - アラートを表示</li>
+                            <li><code>&lt;img src="x" onerror="alert('XSS');"&gt;</code> - 画像読み込みエラー時にスクリプト実行</li>
+                            <li><code>&lt;a href="javascript:alert('XSS')"&gt;クリックしてください&lt;/a&gt;</code> - リンククリック時にスクリプト実行</li>
+                        </ul>
+                        <p>
+                            安全な表示方法では、HTMLをエスケープするため、こうした攻撃は無効化されます。実際の開発では常に適切なエスケープを行いましょう。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 
