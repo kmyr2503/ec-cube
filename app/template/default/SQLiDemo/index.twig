@@ -1,0 +1,99 @@
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'front_page' %}
+
+{% block main %}
+    <div class="ec-role">
+        <div class="ec-pageHeader">
+            <h1>SQLインジェクションデモ</h1>
+        </div>
+        
+        <div class="ec-off1Grid">
+            <div class="ec-off1Grid__cell">
+                <p class="text-danger">※ これは教育目的のデモページです。実際の開発では安全な方法を常に使用してください。</p>
+                
+                <form method="post" action="{{ url('sql_injection_demo') }}" class="ec-searchForm">
+                    <div class="ec-input">
+                        <input type="text" name="search_word" value="{{ search_word }}" placeholder="検索キーワードを入力" class="ec-input__input">
+                    </div>
+                    
+                    <div class="ec-radio ec-searchOptions">
+                        <div class="ec-radio__wrap">
+                            <label>
+                                <input type="radio" name="search_type" value="safe" {% if search_type == 'safe' or search_type is empty %}checked{% endif %}>
+                                安全な検索方法（パラメータバインディングあり）
+                            </label>
+                        </div>
+                        <div class="ec-radio__wrap">
+                            <label>
+                                <input type="radio" name="search_type" value="unsafe" {% if search_type == 'unsafe' %}checked{% endif %}>
+                                安全でない検索方法（SQLインジェクションの脆弱性あり）
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="ec-blockBtn--action">
+                        <button type="submit" class="ec-blockBtn--action">検索する</button>
+                    </div>
+                </form>
+                
+                {% if error %}
+                    <div class="ec-alert-warning">
+                        <div class="ec-alert-warning__text">
+                            <p><span class="ec-alert-warning__icon"><img src="{{ asset('assets/icon/exclamation-warning.svg') }}"/></span>エラー: {{ error }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <hr>
+                
+                <div class="ec-searchResultHeader">
+                    <h2>検索結果 ({{ results|length }}件)</h2>
+                </div>
+                
+                {% if results|length > 0 %}
+                    <div class="ec-shelfGrid">
+                        {% for Product in results %}
+                            <div class="ec-shelfGrid__item">
+                                <div class="ec-productRole">
+                                    <div class="ec-productRole__header">
+                                        <h3 class="ec-productRole__title">{{ Product.name|default(Product.id) }}</h3>
+                                        <p class="ec-productRole__id">ID: {{ Product.id }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="ec-searchResultEmpty">
+                        {% if search_word %}
+                            <p>検索条件に一致する商品が見つかりませんでした。</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                
+                <hr>
+                
+                <div class="ec-alert-warning">
+                    <div class="ec-alert-warning__text">
+                        <h4>SQLインジェクションとは</h4>
+                        <p>
+                            SQLインジェクションは、Webアプリケーションのセキュリティ上の脆弱性の一つで、
+                            攻撃者がSQLクエリに悪意のあるコードを注入することでデータベースを不正に操作する攻撃手法です。
+                        </p>
+                        <p>
+                            安全でない方法で検索する場合、以下のような入力で攻撃ができる可能性があります：
+                        </p>
+                        <ul>
+                            <li><code>' OR '1'='1</code> - すべての商品を表示</li>
+                            <li><code>' UNION SELECT id, name, '商品説明' FROM dtb_product --</code> - 別のテーブルのデータを取得</li>
+                        </ul>
+                        <p>
+                            安全な検索方法では、こうした攻撃は無効化されます。実際の開発では常にパラメータバインディングを使用しましょう。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 
