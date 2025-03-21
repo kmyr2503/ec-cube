@@ -1,0 +1,99 @@
+{% extends 'default_frame.twig' %}
+
+{% set body_class = 'front_page' %}
+
+{% block main %}
+    <div class="ec-role">
+        <div class="ec-pageHeader">
+            <h1>クロスサイトリクエストフォージェリ（CSRF）デモ</h1>
+        </div>
+        
+        <div class="ec-off1Grid">
+            <div class="ec-off1Grid__cell">
+                <p class="text-danger">※ これは教育目的のデモページです。実際の開発では常にCSRF保護を有効にしてください。</p>
+                
+                <div class="ec-alert-warning">
+                    <div class="ec-alert-warning__text">
+                        <h4>デモの使い方</h4>
+                        <p>
+                            1. 「保護なし」モードでいずれかのアクションを実行します。<br>
+                            2. <a href="{{ url('csrf_evil_demo') }}" target="_blank">悪意のあるサイト</a>を別タブで開きます。<br>
+                            3. 悪意のあるサイト上のボタンをクリックすると、ユーザーが知らないうちにアクションが実行されます。<br>
+                            4. 「保護あり」モードに切り替えて同じ手順を試すと、保護機能が働きます。
+                        </p>
+                    </div>
+                </div>
+                
+                {% if result %}
+                    <div class="ec-alert-{% if result.success %}success{% else %}warning{% endif %}">
+                        <div class="ec-alert-{% if result.success %}success{% else %}warning{% endif %}__text">
+                            <p>{{ result.message }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <form method="post" action="{{ url('csrf_demo') }}" class="ec-searchForm">
+                    {# <div class="ec-radio ec-searchOptions">
+                        <div class="ec-radio__wrap">
+                            <label>
+                                <input type="radio" name="protection_type" value="protected" {% if protection_type == 'protected' or protection_type is empty %}checked{% endif %}>
+                                保護あり（CSRFトークンを使用）
+                            </label>
+                        </div>
+                        <div class="ec-radio__wrap">
+                            <label>
+                                <input type="radio" name="protection_type" value="unprotected" {% if protection_type == 'unprotected' %}checked{% endif %}>
+                                保護なし（CSRFの脆弱性あり）
+                            </label>
+                        </div>
+                    </div> #}
+                    
+                    {# {% if protection_type == 'protected' %} #}
+                        <input type="hidden" name="_token" value="{{ csrf_token }}">
+                    {# {% endif %} #}
+                    
+                    <div class="ec-formRow">
+                        <h4>実行するアクション：</h4>
+                        {% set actions = [
+                            {value: 'change_email', label: 'メールアドレス変更', class: 'ec-blockBtn--action'},
+                            {value: 'transfer_money', label: '送金実行', class: 'ec-blockBtn--action'},
+                            {value: 'delete_account', label: 'アカウント削除', class: 'ec-blockBtn--cancel'}
+                        ] %}
+                        
+                        {% for action_item in actions %}
+                            <div class="{{ action_item.class }} mt-2 mb-4">
+                                <button type="submit" name="action" value="{{ action_item.value }}" class="{{ action_item.class }}">
+                                    {{ action_item.label }}
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </form>
+                
+                <hr>
+                
+                <div class="ec-alert-warning">
+                    <div class="ec-alert-warning__text">
+                        <h4>クロスサイトリクエストフォージェリ（CSRF）とは</h4>
+                        <p>
+                            CSRFは、Webアプリケーションのセキュリティ上の脆弱性の一つで、
+                            攻撃者がユーザーの認証情報を利用して、ユーザーの意図しないアクションを実行させる攻撃手法です。
+                        </p>
+                        <p>
+                            例えば以下のような攻撃があります：
+                        </p>
+                        <ul>
+                            <li>攻撃者が罠サイトを用意し、そこに自動送信される隠しフォームを設置</li>
+                            <li>ユーザーが罠サイトを訪問すると、知らないうちにフォームが送信される</li>
+                            <li>ユーザーがログイン中の別サイトで、意図しないアクション（パスワード変更、送金など）が実行される</li>
+                        </ul>
+                        <p>
+                            CSRFトークンを使用することで、このような攻撃から保護することができます。
+                            トークンはサーバー側で生成され、正規のフォームにのみ含まれるため、攻撃者は有効なトークンを偽装できません。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 
